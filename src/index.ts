@@ -1,11 +1,17 @@
+import dotenv from 'dotenv';
 import express from 'express';
-
+import connectDB from './db/connect';   
+dotenv.config();
 const app = express();
-interface User {
-    name: string; 
-    age: number;
-}
-const a: User["name"]= 'a';
 
-app.get('/', (req, res) => res.send('Hello World!'+ a));
-app.listen(3000, () => console.log('Server running on port 3000'))
+try{
+    const connectToDatabase =async () => {
+        await connectDB(process.env.MONGO_URI!);
+        console.log('Database Connected');
+        app.listen(process.env.PORT, () => console.log(`Server running on port ${process.env.PORT}....`))
+        
+    }
+}
+catch(err){
+    console.log(err);
+}
