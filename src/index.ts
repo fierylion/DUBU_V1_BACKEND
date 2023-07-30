@@ -1,13 +1,25 @@
 import dotenv from 'dotenv';
 import express from 'express';
-import connectDB from './db/connect';   
+import connectDB from './db/connect'; 
+import { errorHandler, notFound } from './middleware';
+import 'express-async-errors'  
+import championRoutes from './routes/championRoutes';
+
+import { BadRequestError } from './errors';
+import { registerChampion } from './controllers/championControllers/index';
 dotenv.config()
 const app = express();
 app.use(express.json());
 
-app.get('/', (req, res) => {
-    res.send('Hello World!');
+app.get('/',async (req, res) => {
+   
+    res.send('Welcome to DUBU REST API');
 });
+app.use('/api/v1/champions', championRoutes)
+
+app.use(notFound)
+app.use(errorHandler)
+
 
 const port:number =4000;
 const start =async () => {
